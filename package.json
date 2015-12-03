@@ -1,0 +1,17 @@
+{
+  "name": "metalsmith-spritesmith",
+  "version": "1.0.0",
+  "description": "Metalsmith plugin for creating sprites through spritesmith",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "metalsmith",
+    "spritesmith",
+    "sprite",
+    "icons"
+  ],
+  "author": "Noam Youngerman",
+  "license": "MIT"
+}
