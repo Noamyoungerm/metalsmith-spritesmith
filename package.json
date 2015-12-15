@@ -12,6 +12,12 @@
     "sprite",
     "icons"
   ],
-  "author": "Noam Youngerman",
-  "license": "MIT"
+  "author": "Noam Youngerman <noam@younger.mn>",
+  "license": "MIT",
+  "dependencies": {
+    "minimatch": "^3.0.0",
+    "spritesheet-templates": "^10.0.0",
+    "spritesmith": "^3.0.0",
+    "stream-to-buffer": "^0.1.0"
+  }
 }

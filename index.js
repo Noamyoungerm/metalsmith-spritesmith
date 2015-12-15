@@ -23,7 +23,7 @@ module.exports = function metalsmith_spritesmith(options) {
     // Get a list of paths to send to spritesmith
     var paths;
     try {
-      paths = Object.keys(files).filter(minimatch.filter(plugin_options.src, {dot: true})).map((name) => 'src/' + name);
+      paths = Object.keys(files).filter(minimatch.filter(options.src, {dot: true})).map((name) => 'src/' + name);
     } catch (err) {
       return done(err);
     }
@@ -50,18 +50,18 @@ module.exports = function metalsmith_spritesmith(options) {
       var css_output = templater({
         sprites: coordinates_formatted,
         spritesheet: {
-          width: result.properties.width, height: result.properties.height, image: plugin_options.image_dest
+          width: result.properties.width, height: result.properties.height, image: options.image_dest
         }
       }, options.templater);
 
 
-      files[plugin_options.css_dest] = {
+      files[options.css_dest] = {
         contents: new Buffer(css_output),
         mode: '0644'
       }; 
 
       streamToBuffer(result.image, (err, buffer) => {
-        files[plugin_options.image_dest] = {
+        files[options.image_dest] = {
           contents: buffer,
           mode: '0644'
         };
