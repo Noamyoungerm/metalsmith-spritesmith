@@ -1,6 +1,6 @@
 {
   "name": "metalsmith-spritesmith",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Metalsmith plugin for creating sprites through spritesmith",
   "main": "index.js",
   "scripts": {
