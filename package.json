@@ -12,6 +12,10 @@
     "sprite",
     "icons"
   ],
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/Noamyoungerm/metalsmith-spritesmith.git"
+  },
   "author": "Noam Youngerman <noam@younger.mn>",
   "license": "MIT",
   "dependencies": {
