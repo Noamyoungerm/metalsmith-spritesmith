@@ -3,30 +3,38 @@ var minimatch = require('minimatch');
 var templater = require('spritesheet-templates');
 var streamToBuffer = require('stream-to-buffer');
 
-module.exports = function makeSprites(options) {
+module.exports = function metalsmith_spritesmith(options) {
   options = options || {};
-  options.src = options.src || '**/*.png';
-  const SPRITE_URL = './images/sprites.png';
-  const SPRITESHEET_URL = './sprites.css';
+  options.templater = options.templater || {};
+  options.spritesmith = options.spritesmith || {};
+
+  if(!options.src) {
+    done(new Error('Metalsmith-Spritesmith missing required parameter: src'));
+  }
+  if(!options.image_dest) {
+    done(new Error('Metalsmith-Spritesmith missing required parameter: image_dest'));
+  }
+  if(!options.css_dest) {
+    done(new Error('Metalsmith-Spritesmith missing required parameter: css_dest'));
+  }
 
   return function(files, metalsmith, done) {
-    var err, paths;
+
+    // Get a list of paths to send to spritesmith
+    var paths;
     try {
-      paths = Object.keys(files).filter(minimatch.filter(options.src, {dot: true})).map((name) => 'src/' + name);
-    } catch (_error) {
-      err = _error;
+      paths = Object.keys(files).filter(minimatch.filter(plugin_options.src, {dot: true})).map((name) => 'src/' + name);
+    } catch (err) {
       return done(err);
     }
 
-
     var spritesmith = new Spritesmith();
-    spritesmith.createImages(paths, (_error, images) => {
-      if (_error) {
-        err = _error;
+    spritesmith.createImages(paths, (err, images) => {
+      if (err) {
         return done(err);
       }
 
-      var result = spritesmith.processImages(images, { padding: 2 });
+      var result = spritesmith.processImages(images, options.spritesmith);
 
       var coordinates_formatted = Object.keys(result.coordinates).map(
         (key) => ({
@@ -42,24 +50,18 @@ module.exports = function makeSprites(options) {
       var css_output = templater({
         sprites: coordinates_formatted,
         spritesheet: {
-          width: result.properties.width, height: result.properties.height, image: SPRITE_URL
+          width: result.properties.width, height: result.properties.height, image: plugin_options.image_dest
         }
-      }, {
-        format: 'css',
-        formatOpts: {
-          cssSelector: function(sprite) {
-            return sprite.name.replace(/\:\:/g, ':');
-          }
-        }
-      });
+      }, options.templater);
 
-      files[SPRITESHEET_URL] = {
+
+      files[plugin_options.css_dest] = {
         contents: new Buffer(css_output),
         mode: '0644'
       }; 
 
       streamToBuffer(result.image, (err, buffer) => {
-        files[SPRITE_URL] = {
+        files[plugin_options.image_dest] = {
           contents: buffer,
           mode: '0644'
         };
@@ -69,4 +71,3 @@ module.exports = function makeSprites(options) {
     });
   };
 };
-
