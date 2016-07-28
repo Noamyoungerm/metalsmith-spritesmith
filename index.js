@@ -2,6 +2,7 @@ var Spritesmith = require('spritesmith');
 var minimatch = require('minimatch');
 var templater = require('spritesheet-templates');
 var streamToBuffer = require('stream-to-buffer');
+var path = require('path');
 
 module.exports = function metalsmith_spritesmith(options) {
   options = options || {};
@@ -38,7 +39,7 @@ module.exports = function metalsmith_spritesmith(options) {
 
       var coordinates_formatted = Object.keys(result.coordinates).map(
         (key) => ({
-          name: key.replace(/\.png$/, '').split('/')[key.split('/').length - 1],
+          name: path.basename( key, path.extname( key ) ),
           x: result.coordinates[key].x,
           y: result.coordinates[key].y,
           width: result.coordinates[key].width,
@@ -50,7 +51,7 @@ module.exports = function metalsmith_spritesmith(options) {
       var css_output = templater({
         sprites: coordinates_formatted,
         spritesheet: {
-          width: result.properties.width, height: result.properties.height, image: options.image_dest
+          width: result.properties.width, height: result.properties.height, image: path.posix.relative( path.dirname( options.css_dest ), options.image_dest )
         }
       }, options.templater);
 
