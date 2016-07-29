@@ -8,6 +8,7 @@ module.exports = function metalsmith_spritesmith(options) {
   options = options || {};
   options.templater = options.templater || {};
   options.spritesmith = options.spritesmith || {};
+  options.removeSrc = options.removeSrc || false;
 
   if(!options.src) {
     done(new Error('Metalsmith-Spritesmith missing required parameter: src'));
@@ -68,6 +69,10 @@ module.exports = function metalsmith_spritesmith(options) {
         };
         done();
       });
+
+      if(options.removeSrc){
+        Object.keys(result.coordinates).forEach((file) => {delete files[file.slice(4)];});
+      }
 
     });
   };

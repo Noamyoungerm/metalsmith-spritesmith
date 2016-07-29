@@ -62,3 +62,5 @@ metalsmith(__dirname)
 `spritesmith`: Options that will be passed to `spritesmith.processImages`
 
 `templater`: Options for spritesmith templater
+
+`removeSrc`: Remove input files after sprite creation
